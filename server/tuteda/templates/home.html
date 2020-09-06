@@ -1,0 +1,88 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap&subset=cyrillic" rel="stylesheet">
+
+  <title>TutEda</title>
+  <style>
+    body {
+      height: 100vh;
+      margin: 0;
+      color: black;
+      font-family: sans-serif;
+    }
+
+    .container {
+      padding: 20px;
+      height: 100%;
+      max-width: 1200px;
+      margin: auto;
+      box-sizing: border-box;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .logo {
+      font-family: Montserrat, sans-serif;
+      font-size: 24px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      text-align: center;
+      margin: 40px;
+      font-weight: bold;
+    }
+
+    .logo img {
+      display: flex;
+      flex-direction: row;
+      max-width: 210px;
+      margin-bottom: 40px;
+    }
+
+    @media (min-width: 767px) {
+      .logo {
+        flex-direction: row;
+        font-size: 36px;
+      }
+
+      .logo img {
+        border-radius: 1px;
+        flex-direction: row;
+        margin-bottom: 0;
+        margin-right: 40px;
+      }
+    }
+
+    .link {
+      color: inherit;
+      font-size: 12px;
+      text-transform: uppercase;
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="logo">
+    <img class="logo_img" src="../static/img/hachdev.png">
+    <span>TutEda <br> Приложение для вашего бизнеса</span>
+  </div>
+  <a class="link" href="{% url 'admin:index' %}">Открыть интерфейс администратора</a>
+  {% if debug %}
+    <a class="link" href="{% url 'api-root' %}">API</a>
+  {% endif %}
+</div>
+</body>
+</html>

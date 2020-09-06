@@ -1,0 +1,12 @@
+version: '3.7'
+
+# Override volume location because bitbucket-pipeline has restrictions
+# https://confluence.atlassian.com/bitbucket/run-docker-commands-in-bitbucket-pipelines-879254331.html
+services:
+  db:
+    volumes:
+      - /var/lib/postgresql/data/
+  server:
+    volumes:
+      - /opt/tuteda/server/media/
+      - /opt/tuteda/server/staticfiles/

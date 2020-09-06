@@ -1,0 +1,28 @@
+version: '3.7'
+services:
+  db:
+    image: mdillon/postgis:11
+    environment:
+      - POSTGRES_USER=tuteda
+      - POSTGRES_PASSWORD=ZXxVUmxj5YyaGjqH9RZs
+    ports:
+      - 5432:5432
+    volumes:
+      - db-data:/var/lib/postgresql/data/
+  server:
+      build: server
+      environment:
+        - DATABASE_NAME=tuteda
+        - DATABASE_USER=tuteda
+        - DATABASE_PASSWORD=ZXxVUmxj5YyaGjqH9RZs
+        - DATABASE_HOST=db
+        - DATABASE_PORT=5432
+      depends_on:
+        - db
+      volumes:
+        - server-media:/opt/tuteda/server/media/
+        - server-staticfiles:/opt/tuteda/server/staticfiles/
+volumes:
+  db-data:
+  server-media:
+  server-staticfiles:

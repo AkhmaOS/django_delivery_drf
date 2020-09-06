@@ -1,0 +1,21 @@
+version: '3.7'
+services:
+  server:
+    command: python manage.py runserver 0.0.0.0:8000
+    environment:
+      - DEBUG=1
+      - ALLOWED_HOSTS=*
+    volumes:
+      - ./server:/opt/tuteda/server
+    ports:
+      - 8000:8000
+
+  nginx:
+    build: nginx
+    volumes:
+      - server-media:/opt/tuteda/server/media/
+      - server-staticfiles:/opt/tuteda/server/staticfiles/
+    ports:
+      - 80:80
+    depends_on:
+      - server

@@ -1,0 +1,58 @@
+image: atlassian/default-image:2
+
+
+definitions:
+  services:
+    docker:
+      memory: 2048
+
+  steps:
+    - step: &test
+        name: test
+        script:
+          - docker-compose -f docker-compose.yml -f docker-compose.ci.yml pull server db
+          - docker-compose -f docker-compose.yml -f docker-compose.ci.yml build server db
+          - docker-compose -f docker-compose.yml -f docker-compose.ci.yml run --rm server python manage.py test
+          - docker-compose -f docker-compose.yml -f docker-compose.ci.yml run --rm server python manage.py check
+          - docker-compose -f docker-compose.yml -f docker-compose.ci.yml run --rm server
+            python manage.py collectstatic --no-input --dry-run
+          - docker-compose -f docker-compose.yml -f docker-compose.ci.yml run --rm server
+            python manage.py makemigrations --dry-run --check
+        services:
+          - docker
+pipelines:
+  pull-requests:
+    '**':
+      - step: *test
+
+  branches:
+    develop:
+      - step: *test
+
+    master:
+      - step: *test
+      - step:
+          name: release
+          script:
+            - echo $DOCKER_PASSWORD | docker login --username $DOCKER_USER --password-stdin cr.yandex
+            - docker-compose -f docker-compose.yml -f docker-compose.production.yml build
+            - docker-compose -f docker-compose.yml -f docker-compose.production.yml push
+          services:
+            - docker
+      - step:
+          name: deploy
+          deployment: production
+          script:
+            - mkdir -p ~/.docker
+            - echo $DOCKER_TLS_CA | base64 --decode > ~/.docker/ca.pem
+            - echo $DOCKER_TLS_CERT | base64 --decode > ~/.docker/cert.pem
+            - echo $DOCKER_TLS_KEY | base64 --decode > ~/.docker/key.pem
+            - echo $DOCKER_PASSWORD | docker login --username $DOCKER_USER --password-stdin cr.yandex
+            - docker-compose -f docker-compose.yml -f docker-compose.production.yml pull
+            - docker-compose -f docker-compose.yml -f docker-compose.production.yml run --rm server
+              python manage.py migrate --noinput
+            - docker-compose -f docker-compose.yml -f docker-compose.production.yml run --rm server
+              python manage.py collectstatic --noinput
+            - docker-compose -f docker-compose.yml -f docker-compose.production.yml up -d
+          services:
+            - docker
