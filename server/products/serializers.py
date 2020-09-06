@@ -1,7 +1,4 @@
 from rest_framework import serializers
-from rest_framework.fields import SerializerMethodField
-from rest_framework.relations import StringRelatedField
-
 from .models import ProductCategory, Product, ProductImage
 
 
@@ -27,8 +24,14 @@ class ProductImageSerializer(serializers.ModelSerializer):
 
 class ProductSerializer(serializers.ModelSerializer):
     category = ProductCategorySerializer()
-    image = ProductImageSerializer(many=True)
+    product_image = serializers.SerializerMethodField()
 
     class Meta:
         model = Product
-        fields = ('id', 'name', 'description', 'category', 'image')
+        fields = ('id', 'name', 'description', 'category', 'product_image')
+
+    @staticmethod
+    def get_product_image(obj):
+        images = obj.product.all()
+        response = ProductImageSerializer(images, many=True).data
+        return response
