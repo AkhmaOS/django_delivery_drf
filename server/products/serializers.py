@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import ProductCategory, Product, ProductImage
+from server.tuteda import settings
 
 
 class ProductCategorySerializer(serializers.ModelSerializer):
@@ -28,10 +29,10 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ('id', 'name', 'description', 'category', 'product_image')
+        fields = ('id', 'name', 'description', 'price', 'is_popular', 'category', 'product_image')
 
     @staticmethod
     def get_product_image(obj):
-        images = obj.product.all()
-        response = ProductImageSerializer(images, many=True).data
+        image = obj.product.all()
+        response = ProductImageSerializer(image, many=True).data
         return response

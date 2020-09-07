@@ -17,6 +17,8 @@ class Product(models.Model):
     name = models.CharField('название товара', max_length=256)
     description = models.TextField('описание товара')
     category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE, related_name='products')
+    price = models.CharField('цена товара', max_length=256)
+    is_popular = models.BooleanField('популярное', default=False)
 
     def __str__(self):
         return self.name

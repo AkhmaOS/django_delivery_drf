@@ -14,8 +14,9 @@ class APIRootView(APIView):
     def get(self, request):
         data = {
             'settings': reverse('settings-app', request=request),
-            'categories': reverse('category', request=request),
+            'categories': reverse('product-category', request=request),
             'products': reverse('products', kwargs={'category_id': '1'}, request=request),
             'product': reverse('product', kwargs={'category_id': '1', 'product_id': '1'}, request=request),
+            'is popular': reverse('product-popular', request=request),
         }
         return Response(data)

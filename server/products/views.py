@@ -37,3 +37,8 @@ class ProductView(ListAPIView):
             return queryset
         else:
             return HttpResponseBadRequest
+
+
+class ProductPopularView(ListAPIView):
+    serializer_class = ProductSerializer
+    queryset = Product.objects.filter(is_popular=True)
