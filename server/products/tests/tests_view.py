@@ -4,7 +4,7 @@ from django.urls import reverse
 from ..views import ProductCategory, Product
 
 
-class ProductsTest(TestCase):
+class ProductViewTest(TestCase):
 
     def setUp(self):
         ProductCategory.objects.create(

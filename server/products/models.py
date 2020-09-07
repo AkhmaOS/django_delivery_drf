@@ -29,7 +29,7 @@ class Product(models.Model):
 
 
 class ProductImage(models.Model):
-    image = FilerImageField(on_delete=models.CASCADE)
+    image = FilerImageField(on_delete=models.CASCADE, null=True, blank=True)
     product = models.ForeignKey(Product, on_delete=models.PROTECT, related_name='product')
 
     def __str__(self):

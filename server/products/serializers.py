@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from .models import ProductCategory, Product, ProductImage
-from server.tuteda import settings
 
 
 class ProductCategorySerializer(serializers.ModelSerializer):
